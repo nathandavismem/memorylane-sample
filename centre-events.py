@@ -26,7 +26,7 @@ def get_batch_centre_id(link_code: str):
 def get_centre_events(
     link_code: str,
     category: str = None,
-    event_date: list[str] = None,  # Now accepts a list of dates
+    event_date: str = None,  # Now accepts a list of dates
     start_time: str = None,
     end_time: str = None,
     sequence_uid: str = None
@@ -51,7 +51,7 @@ def get_centre_events(
     if category:
         query = query.eq("category", category)
     if event_date:
-        query = query.ov("date", event_date)  # Overlaps with array of dates
+        query = query.ov("date", [event_date])  # Overlaps with array of dates
     if start_time:
         query = query.gte("time_start", start_time)
     if end_time:
@@ -67,5 +67,5 @@ def get_centre_events(
 
 # Example Usage
 if __name__ == "__main__":
-    events = get_centre_events("JU5JE", category="Arts & Culture", event_date=["2025-02-28"], start_time="08:00:00", end_time="18:00:00")
+    events = get_centre_events("JU5JE", category="Arts & Culture", event_date="2025-02-28", start_time="08:00:00", end_time="18:00:00")
     print(events)
