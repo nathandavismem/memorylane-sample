@@ -13,11 +13,15 @@ def get_centre_activities(
     start_time: str = None,
     end_time: str = None,
     min_date: str = None,
+    max_date: str = None,  # Added max_date filtering
 ):
     query = supabase.table("centre_activities").select("*").eq("centre_id", centre_id)
     
     if min_date:
         query = query.gte("min_date", min_date)
+    
+    if max_date:
+        query = query.lte("max_date", max_date)  # Filtering for max_date
     
     if category:
         query = query.eq("program_category", category)
@@ -38,5 +42,5 @@ def get_centre_activities(
 
 # Example Usage
 if __name__ == "__main__":
-    events = get_centre_activities(11, min_date="2025-02-28")
+    events = get_centre_activities(11, min_date="2025-02-28", max_date="2025-03-10")
     print(events)
