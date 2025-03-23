@@ -25,7 +25,7 @@ def convert_times_to_timezone(activity: dict):
     for timestamp in activity["time"]:
         dt_utc = parser.isoparse(timestamp)  # Parse string to datetime (UTC)
         dt_local = dt_utc.astimezone(target_tz)  # Convert to target timezone
-        formatted_time = dt_local.strftime("%Y-%m-%d %H:%M")  # Format as "yyyy-MM-dd HH:mm"
+        formatted_time = dt_utc.strftime("%Y-%m-%d %H:%M")  # Format as "yyyy-MM-dd HH:mm"
         converted_times.append(formatted_time)
 
     return {**activity, "time": converted_times}  # Return updated activity
