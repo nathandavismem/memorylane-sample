@@ -8,7 +8,7 @@ SUPABASE_KEY = "SUPABASE_KEY"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def convert_times_to_timezone(activity: dict):
+def format_timestamp(activity: dict):
     """
     Converts the time values in the 'time' array to the correct time based on 'time_zone',
     formatting them as "yyyy-MM-dd HH:mm".
@@ -16,15 +16,9 @@ def convert_times_to_timezone(activity: dict):
     :param activity: Dictionary containing 'time' (list of timestamps) and 'time_zone'.
     :return: Updated activity dictionary with formatted 'time' values.
     """
-    if not activity.get("time") or not activity.get("time_zone"):
-        return activity  # No changes if time or time_zone is missing
-
-    target_tz = pytz.timezone(activity["time_zone"])
-
     converted_times = []
     for timestamp in activity["time"]:
         dt_utc = parser.isoparse(timestamp)  # Parse string to datetime (UTC)
-        dt_local = dt_utc.astimezone(target_tz)  # Convert to target timezone
         formatted_time = dt_utc.strftime("%Y-%m-%d %H:%M")  # Format as "yyyy-MM-dd HH:mm"
         converted_times.append(formatted_time)
 
@@ -58,10 +52,10 @@ def get_centre_activities(
     
     # Convert and format the times for each activity
     activities = response.data or []
-    return [convert_times_to_timezone(activity) for activity in activities]
+    return [format_timestamp(activity) for activity in activities]
 
 
 # Example Usage
 if __name__ == "__main__":
-    events = get_centre_activities(11)
+    events = get_centre_activities(7)
     print(events)
